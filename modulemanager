@@ -1,0 +1,41 @@
+package negroidea.base.module
+
+
+import negroidea.client.modules.*
+import java.util.ArrayList
+
+class ModuleManager {
+
+
+
+
+    companion object {
+        @JvmField
+		var modules = ArrayList<Module>()
+        fun getModule(moduleName: String?): Module? {
+            if (moduleName != null) {
+                for (mod in modules) {
+                    if (mod.name.equals(moduleName, ignoreCase = true)) {
+                        return mod
+                    }
+                }
+            }
+            return null
+        }
+
+        fun getModuleClass(klass: Class<out Module?>): Module? {
+            for (mod in modules) {
+                if (mod.javaClass == klass) {
+                    return mod
+                }
+            }
+            return null
+        }
+    }
+
+    init {
+      /* add mods here
+        modules.add(Example())
+        */
+    }
+}
