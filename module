@@ -1,0 +1,69 @@
+package negroidea.base.module
+
+import com.darkmagician6.eventapi.EventManager
+import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.ScaledResolution
+
+abstract class Module(var name: String, var description: String, var category: Category, var keybind: Int) {
+     private var anim = 0
+    var animation = 0
+    var suffix: String? = null
+    var isVisible = false
+    var isEnabled = false
+    fun isCategory(cat: Category): Boolean {
+        return if (cat == category) true else false
+    }
+
+    fun toggleModule() {
+        setState(!isEnabled)
+    }
+
+    fun setState(state: Boolean) {
+        onToggle()
+        if (state) {
+            onEnable()
+            EventManager.register(this)
+            isEnabled = true
+        } else {
+            onDisable()
+            EventManager.unregister(this)
+            isEnabled = false
+        }
+    }
+
+    open fun onEnable() {}
+    open fun onToggle() {}
+    open fun onDisable() {}
+    enum class Category {
+        COMBAT, PLAYER, VISUALS, WORLD, Move
+    }
+
+   @JvmName("getAnim1")
+      fun getAnim(): Int {
+        if (anim == -1) {
+            anim = 0
+        }
+        return anim
+    }
+
+    val anim2: Int
+        get() {
+            if (anim == -1) {
+                anim = 0
+            }
+            return anim
+        }
+
+    fun setAnim(anim: Int): Int {
+        return anim.also { this.anim = it }
+    }
+
+    companion object {
+        @JvmField
+        val mc = Minecraft.getMinecraft()
+    }
+
+    init {
+        val sr = ScaledResolution(mc)
+    }
+}
