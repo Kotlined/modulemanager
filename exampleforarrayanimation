@@ -1,0 +1,39 @@
+package negroidea.client.modules
+
+import com.darkmagician6.eventapi.EventTarget
+import negroidea.base.events.EventRender2D
+import negroidea.base.module.Module
+import negroidea.base.module.ModuleManager
+import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.ScaledResolution
+import org.lwjgl.input.Keyboard
+import java.awt.Color
+
+class Hud : Module("Hud", "Head up  Display", Category.VISUALS, Keyboard.KEY_NONE) {
+    @EventTarget
+    fun mahmud(event: EventRender2D?) {
+      
+        var y: Int = 1
+        for (m in ModuleManager.modules) {
+            if (m.anim2 == -1 && m.isEnabled) continue
+            run {
+                val sr1 = ScaledResolution(Minecraft.getMinecraft(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight)
+                val string = String.format("%s", m.name)
+                val width1 = (sr1.scaledWidth - Minecraft.getMinecraft().fontRendererObj.getStringWidth(string) - 1)
+                val starter = sr1.scaledWidth - m.anim2
+                Minecraft.getMinecraft().fontRendererObj.drawString(string, starter, y.toInt(), Color.white.rgb)
+                if (m.getAnim() < Minecraft.getMinecraft().fontRendererObj.getStringWidth(string) && m.isEnabled) {
+                    m.setAnim(m.getAnim() + 1)
+                }
+                if (m.getAnim() > -1 && !m.isEnabled) {
+                    m.setAnim(m.getAnim() - 1)
+                }
+                if (m.getAnim() < Minecraft.getMinecraft().fontRendererObj.getStringWidth(string) && m.isEnabled) {
+                    Minecraft.getMinecraft().fontRendererObj.getStringWidth(string)
+                }
+                y += Math.min(8, m.anim2).toByte()
+
+            }
+        }
+    }
+}
